@@ -4,7 +4,7 @@ const schema = require('./schema/schema');
 
 const app = express();
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT  || 4000;
 
 app.use('/graphql', expressGraphQL({
   schema,
