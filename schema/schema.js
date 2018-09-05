@@ -9,11 +9,18 @@ const {
   GraphQLNonNull
 } = graphql;
 
-const { CommentType, PostType, UserType, AlbumType } = require('./types');
+const { CommentType, PostType, UserType, AlbumType, TodoType } = require('./types');
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    todos: {
+      type: new GraphQLList(TodoType),
+      resolve(_, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/todos`)
+          .then(res => res.data);
+      }
+    },
     albums: {
       type: new GraphQLList(AlbumType),
       resolve(_, args) {

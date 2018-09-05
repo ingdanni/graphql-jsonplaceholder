@@ -4,10 +4,21 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLBoolean,
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull
 } = graphql;
+
+const TodoType = new GraphQLObjectType({
+  name: 'Todo',
+  fields: () => ({
+    userId: { type: GraphQLInt },
+    id: { type: GraphQLInt },
+    title: { type: GraphQLString },
+    completed: { type: GraphQLBoolean },
+  })
+});
 
 const CommentType = new GraphQLObjectType({
   name: 'Comment',
@@ -87,5 +98,6 @@ module.exports = {
   CommentType,
   UserType,
   PostType,
-  AlbumType
+  AlbumType,
+  TodoType
 }
