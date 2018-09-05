@@ -1,3 +1,4 @@
+const axios = require('axios');
 const graphql = require('graphql');
 const {
   GraphQLObjectType,
@@ -19,6 +20,32 @@ const CommentType = new GraphQLObjectType({
   })
 });
 
+const PhotoType = new GraphQLObjectType({
+  name: 'Photo',
+  fields: () => ({
+    albumId: { type: GraphQLInt },
+    id: { type: GraphQLInt },
+    title: { type: GraphQLString },
+    url: { type: GraphQLString },
+    thumbnailUrl: { type: GraphQLString }
+  })
+})
+
+const AlbumType = new GraphQLObjectType({
+  name: 'Album',
+  fields: () => ({
+    userId: { type: GraphQLInt },
+    id: { type: GraphQLInt },
+    title: { type: GraphQLString },
+    photos: {
+      type: new GraphQLList(PhotoType),
+      resolve(parentValues, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/albums/${parentValues.id}/photos`)
+          .then(res => res.data);
+      }
+    }
+  })
+});
 
 const PostType = new GraphQLObjectType({
   name: 'Post',
@@ -29,8 +56,8 @@ const PostType = new GraphQLObjectType({
     body: { type: GraphQLString },
     comments: {
       type: new GraphQLList(CommentType),
-      resolve(parentValue, args) {
-        return axios.get(`https://jsonplaceholder.typicode.com/posts/${parentValue.id}/comments`)
+      resolve(parentValues, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/posts/${parentValues.id}/comments`)
           .then(res => res.data);
       }
     }
@@ -48,8 +75,8 @@ const UserType = new GraphQLObjectType({
     website: { type: GraphQLString },
     posts: {
       type: new GraphQLList(PostType),
-      resolve(parentValue, args) {
-        return axios.get(`https://jsonplaceholder.typicode.com/users/${parentValue.id}/posts`)
+      resolve(parentValues, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/users/${parentValues.id}/posts`)
           .then(res => res.data);
       }
     }
@@ -59,5 +86,6 @@ const UserType = new GraphQLObjectType({
 module.exports = {
   CommentType,
   UserType,
-  PostType
+  PostType,
+  AlbumType
 }

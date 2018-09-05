@@ -11,6 +11,10 @@ app.use('/graphql', expressGraphQL({
   graphiql: true
 }));
 
+app.use('/', (req, res) => {
+  res.redirect('/graphql')
+});
+
 app.listen(port, () => {
   console.log('Listening');
 });

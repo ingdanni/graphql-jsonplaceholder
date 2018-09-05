@@ -9,11 +9,28 @@ const {
   GraphQLNonNull
 } = graphql;
 
-const { CommentType, PostType, UserType } = require('./types');
+const { CommentType, PostType, UserType, AlbumType } = require('./types');
 
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    albums: {
+      type: new GraphQLList(AlbumType),
+      resolve(_, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/albums`)
+          .then(res => res.data);
+      }
+    },
+    album: {
+      type: AlbumType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) }
+      },
+      resolve(_, args) {
+        return axios.get(`https://jsonplaceholder.typicode.com/albums/${args.id}`)
+          .then(res => res.data);
+      }
+    },
     comments: {
       type: new GraphQLList(CommentType),
       resolve(_, args) {
