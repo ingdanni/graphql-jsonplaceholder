@@ -17,5 +17,8 @@
     "graphql": "^0.8.2",
     "json-server": "^0.9.4",
     "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }
